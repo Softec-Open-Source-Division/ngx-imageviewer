@@ -1,12 +1,12 @@
-import { Component, Input, ViewChild, AfterViewInit, Renderer2, Inject, OnDestroy } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription } from 'rxjs';
+import {AfterViewInit, Component, Inject, Input, OnDestroy, Renderer2, ViewChild} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Subscription} from 'rxjs';
 
-import { ImageViewerConfig, IMAGEVIEWER_CONFIG, IMAGEVIEWER_CONFIG_DEFAULT, ButtonConfig, ButtonStyle } from './imageviewer.config';
-import { Viewport, Button, toSquareAngle, ResourceLoader } from './imageviewer.model';
-import { ImageResourceLoader } from './image.loader';
-import { ImageCacheService } from './imagecache.service';
-import { PdfResourceLoader } from './pdf.loader';
+import {IMAGEVIEWER_CONFIG, IMAGEVIEWER_CONFIG_DEFAULT, ImageViewerConfig} from './imageviewer.config';
+import {Button, ResourceLoader, toSquareAngle} from './imageviewer.model';
+import {ImageResourceLoader} from './image.loader';
+import {ImageCacheService} from './imagecache.service';
+import {PdfResourceLoader} from './pdf.loader';
 
 const MIN_TOOLTIP_WIDTH_SPACE = 500;
 
@@ -14,66 +14,34 @@ const MIN_TOOLTIP_WIDTH_SPACE = 500;
   selector: 'ngx-imageviewer',
   template: `
     <canvas #imageContainer [width]="width" [height]="height"
-      (click)="onTap($event)" (pinchin)="processTouchEvent($event)" (pinchout)="processTouchEvent($event)"
-      (panmove)="processTouchEvent($event)" (panend)="onTouchEnd()" (rotatemove)="processTouchEvent($event)"
-      (rotateend)="onTouchEnd()">
+            (click)="onTap($event)" (pinchin)="processTouchEvent($event)" (pinchout)="processTouchEvent($event)"
+            (panmove)="processTouchEvent($event)" (panend)="onTouchEnd()" (rotatemove)="processTouchEvent($event)"
+            (rotateend)="onTouchEnd()">
     </canvas>
   `,
   styles: [`
-    :host { display: block }
-    :host canvas { margin: 0 auto; display: block }
-    [hidden] { display: none !important }
+    :host {
+      display: block
+    }
+
+    :host canvas {
+      margin: 0 auto;
+      display: block
+    }
+
+    [hidden] {
+      display: none !important
+    }
   `]
 })
 export class ImageViewerComponent implements AfterViewInit, OnDestroy {
 
-  //#region Input properties
-  private _src: string | File;
-  get src() { return this._src; }
-  @Input('src') set src(value) {
-    if (value === this._src) { return; }
-    this._src = value;
-    this.setUpResource();
-  }
-
-  // FIX not workign properly
-  private _filetype: string;
-  get filetype() { return this._filetype; }
-  @Input('filetype') set filetype(value: string) {
-    if (value === this._filetype) { return; }
-    this._filetype = value;
-    this.setUpResource();
-  }
-
-  private _width: number;
-  get width() { return this._width; }
-  @Input('width') set width(value) {
-    if (value === this._width) { return; }
-    this._width = value;
-    if (this._canvas) { this._canvas.width = this._width; }
-    this.resetImage();
-  }
-
-  private _height: number;
-  get height() { return this._height; }
-  @Input('height') set height(value) {
-    if (value === this._height) { return; }
-    this._height = value;
-    if (this._canvas) { this._canvas.height = this._height; }
-    this.resetImage();
-  }
-
-  @ViewChild('imageContainer', {static: false}) canvasRef: any;
-  //#endregion
-
-  //#region Private properties
+  @ViewChild('imageContainer') canvasRef: any;
   // Canvas 2D context
   private _canvas: HTMLCanvasElement;
   private _context: CanvasRenderingContext2D;
-
   // dirty state
   private _dirty = true;
-
   // action buttons
   private _nextPageButton: Button;
   private _beforePageButton: Button;
@@ -82,28 +50,23 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private _rotateLeftButton: Button;
   private _rotateRightButton: Button;
   private _resetButton: Button;
-
   // contains all active buttons
   private _buttons = [];
-
   // current tool tip (used to track change of tool tip)
   private _currentTooltip = null;
+  //#endregion
 
+  //#region Private properties
   // cached data when touch events started
   private _touchStartState: any = {};
-
   // list of event listener destroyers
   private _listenDestroyList = [];
-
   // image / Pdf Drawable Resource
   private _resource: ResourceLoader;
   private _resourceChangeSub: Subscription;
-
   // Caching resourceLoader instances to reuse
   private _imageResource: ImageResourceLoader;
   private _pdfResource: PdfResourceLoader;
-
-  //#endregion
 
   //#region Lifecycle events
   constructor(
@@ -130,6 +93,72 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
       .sort((a, b) => a.sortId - b.sortId);
   }
 
+  //#region Input properties
+  private _src: string | File;
+
+  get src() {
+    return this._src;
+  }
+
+  @Input('src') set src(value) {
+    if (value === this._src) {
+      return;
+    }
+    this._src = value;
+    this.setUpResource();
+  }
+
+  // FIX not workign properly
+  private _filetype: string;
+
+  get filetype() {
+    return this._filetype;
+  }
+
+  @Input('filetype') set filetype(value: string) {
+    if (value === this._filetype) {
+      return;
+    }
+    this._filetype = value;
+    this.setUpResource();
+  }
+
+  private _width: number;
+
+  get width() {
+    return this._width;
+  }
+
+  @Input('width') set width(value) {
+    if (value === this._width) {
+      return;
+    }
+    this._width = value;
+    if (this._canvas) {
+      this._canvas.width = this._width;
+    }
+    this.resetImage();
+  }
+
+  private _height: number;
+
+  get height() {
+    return this._height;
+  }
+
+  //#endregion
+
+  @Input('height') set height(value) {
+    if (value === this._height) {
+      return;
+    }
+    this._height = value;
+    if (this._canvas) {
+      this._canvas.height = this._height;
+    }
+    this.resetImage();
+  }
+
   ngAfterViewInit() {
     this._canvas = this.canvasRef.nativeElement;
     this._context = this._canvas.getContext('2d');
@@ -139,13 +168,34 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this._canvas.height = this.height || this.config.height;
 
     // setting buttons actions
-    this._nextPageButton.onClick = (evt) => { this.nextPage(); return false; };
-    this._beforePageButton.onClick = (evt) => { this.previousPage(); return false; };
-    this._zoomOutButton.onClick = (evt) => { this.zoomOut(); return false; };
-    this._zoomInButton.onClick = (evt) => { this.zoomIn(); return false; };
-    this._rotateLeftButton.onClick = (evt) => { this.rotateLeft(); return false; };
-    this._rotateRightButton.onClick = (evt) => { this.rotateRight(); return false; };
-    this._resetButton.onClick = (evt) => { this.resetImage(); return false; };
+    this._nextPageButton.onClick = (evt) => {
+      this.nextPage();
+      return false;
+    };
+    this._beforePageButton.onClick = (evt) => {
+      this.previousPage();
+      return false;
+    };
+    this._zoomOutButton.onClick = (evt) => {
+      this.zoomOut();
+      return false;
+    };
+    this._zoomInButton.onClick = (evt) => {
+      this.zoomIn();
+      return false;
+    };
+    this._rotateLeftButton.onClick = (evt) => {
+      this.rotateLeft();
+      return false;
+    };
+    this._rotateRightButton.onClick = (evt) => {
+      this.rotateRight();
+      return false;
+    };
+    this._resetButton.onClick = (evt) => {
+      this.resetImage();
+      return false;
+    };
 
     // register event listeners
     this.addEventListeners();
@@ -191,16 +241,21 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
       });
       this._resource.setUp();
       this.resetImage();
-      if (this._context) { this.updateCanvas(); }
+      if (this._context) {
+        this.updateCanvas();
+      }
     }
   }
+
   //#endregion
 
   //#region Touch events
   onTap(evt) {
-    const position = { x: evt.pageX, y: evt.pageY };
+    const position = {x: evt.pageX, y: evt.pageY};
     const activeElement = this.getUIElement(this.screenToCanvasCentre(position));
-    if (activeElement !== null) { activeElement.onClick(evt); }
+    if (activeElement !== null) {
+      activeElement.onClick(evt);
+    }
   }
 
   onTouchEnd() {
@@ -211,26 +266,33 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
 
   processTouchEvent(evt) {
     // process pan
-    if (!this._touchStartState.viewport) { this._touchStartState.viewport = Object.assign({}, this._resource.viewport); }
+    if (!this._touchStartState.viewport) {
+      this._touchStartState.viewport = Object.assign({}, this._resource.viewport);
+    }
 
     const viewport = this._resource.viewport;
     viewport.x = this._touchStartState.viewport.x + evt.deltaX;
     viewport.y = this._touchStartState.viewport.y + evt.deltaY;
 
     // process pinch in/out
-    if (!this._touchStartState.scale) { this._touchStartState.scale = this._resource.viewport.scale; }
+    if (!this._touchStartState.scale) {
+      this._touchStartState.scale = this._resource.viewport.scale;
+    }
     const newScale = this._touchStartState.scale * evt.scale;
     viewport.scale = newScale > this._resource.maxScale ? this._resource.maxScale :
       newScale < this._resource.minScale ? this._resource.minScale : newScale;
 
     // process rotate left/right
-    if (!this._touchStartState.rotate) { this._touchStartState.rotate = { rotation: viewport.rotation, startRotate: evt.rotation }; }
+    if (!this._touchStartState.rotate) {
+      this._touchStartState.rotate = {rotation: viewport.rotation, startRotate: evt.rotation};
+    }
     if (evt.rotation !== 0) {
       const newAngle = this._touchStartState.rotate.rotation + evt.rotation - this._touchStartState.rotate.startRotate;
       viewport.rotation = this.config.rotateStepper ? toSquareAngle(newAngle) : newAngle;
     }
     this._dirty = true;
   }
+
   //#endregion
 
   //#region Mouse Events
@@ -241,12 +303,14 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
 
     // show tooltip when mouseover it
     this._listenDestroyList.push(this._renderer.listen(this._canvas, 'mousemove', (evt) =>
-      this.checkTooltipActivation(this.screenToCanvasCentre({ x: evt.clientX, y: evt.clientY }))
+      this.checkTooltipActivation(this.screenToCanvasCentre({x: evt.clientX, y: evt.clientY}))
     ));
   }
 
   private onMouseWheel(evt) {
-    if (!evt) { evt = event; }
+    if (!evt) {
+      evt = event;
+    }
     evt.preventDefault();
     if (evt.detail < 0 || evt.wheelDelta > 0) { // up -> larger
       this.zoomIn();
@@ -267,63 +331,89 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
         this._currentTooltip = activeElement.tooltip;
       }
     }
-    if (oldToolTip !== this._currentTooltip) { this._dirty = true; }
+    if (oldToolTip !== this._currentTooltip) {
+      this._dirty = true;
+    }
   }
+
   //#endregion
 
   //#region Button Actions
 
   private nextPage() {
-    if (!this._resource) { return; }
-    if (this._resource.currentItem >= this._resource.totalItem) { return; }
-    if (this._resource.currentItem < 1) { this._resource.currentItem = 0; }
+    if (!this._resource) {
+      return;
+    }
+    if (this._resource.currentItem >= this._resource.totalItem) {
+      return;
+    }
+    if (this._resource.currentItem < 1) {
+      this._resource.currentItem = 0;
+    }
     this._resource.currentItem++;
     this._resource.loadResource();
     this._dirty = true;
   }
 
   private previousPage() {
-    if (!this._resource) { return; }
-    if (this._resource.currentItem <= 1) { return; }
-    if (this._resource.currentItem > this._resource.totalItem) { this._resource.currentItem = this._resource.totalItem + 1; }
+    if (!this._resource) {
+      return;
+    }
+    if (this._resource.currentItem <= 1) {
+      return;
+    }
+    if (this._resource.currentItem > this._resource.totalItem) {
+      this._resource.currentItem = this._resource.totalItem + 1;
+    }
     this._resource.currentItem--;
     this._resource.loadResource();
     this._dirty = true;
   }
 
   private zoomIn() {
-    if (!this._resource) { return; }
+    if (!this._resource) {
+      return;
+    }
     const newScale = this._resource.viewport.scale * (1 + this.config.scaleStep);
     this._resource.viewport.scale = newScale > this._resource.maxScale ? this._resource.maxScale : newScale;
     this._dirty = true;
   }
 
   private zoomOut() {
-    if (!this._resource) { return; }
+    if (!this._resource) {
+      return;
+    }
     const newScale = this._resource.viewport.scale * (1 - this.config.scaleStep);
     this._resource.viewport.scale = newScale < this._resource.minScale ? this._resource.minScale : newScale;
     this._dirty = true;
   }
 
   private rotateLeft() {
-    if (!this._resource) { return; }
+    if (!this._resource) {
+      return;
+    }
     const viewport = this._resource.viewport;
     viewport.rotation = viewport.rotation === 0 ? 270 : viewport.rotation - 90;
     this._dirty = true;
   }
 
   private rotateRight() {
-    if (!this._resource) { return; }
+    if (!this._resource) {
+      return;
+    }
     const viewport = this._resource.viewport;
     viewport.rotation = viewport.rotation === 270 ? 0 : viewport.rotation + 90;
     this._dirty = true;
   }
 
   private resetImage() {
-    if (!this._resource) { return; }
+    if (!this._resource) {
+      return;
+    }
     this._resource.resetViewport(this._canvas);
     this._dirty = true;
   }
+
   //#endregion
 
   //#region Draw Canvas
@@ -383,8 +473,8 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
         , rectWidth = textSize + padding
         , rectHeight = fontSize * 0.70 + padding
         , rectX = this._canvas.width
-          - (2 * radius + 2 * padding) // buttons
-          - rectWidth
+        - (2 * radius + 2 * padding) // buttons
+        - rectWidth
         , rectY = this._canvas.height - rectHeight - padding
         , textX = rectX + 0.5 * padding
         , textY = this._canvas.height - 1.5 * padding;
@@ -442,8 +532,12 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     ctx.quadraticCurveTo(x, y, x + radius, y);
     ctx.closePath();
 
-    if (fill) { ctx.fill(); }
-    if (stroke) { ctx.stroke(); }
+    if (fill) {
+      ctx.fill();
+    }
+    if (stroke) {
+      ctx.stroke();
+    }
   }
 
   //#endregion
@@ -453,22 +547,42 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private extendsDefaultConfig(cfg: ImageViewerConfig) {
     const defaultCfg = IMAGEVIEWER_CONFIG_DEFAULT;
     const localCfg = Object.assign({}, defaultCfg, cfg);
-    if (cfg.buttonStyle) { localCfg.buttonStyle = Object.assign(defaultCfg.buttonStyle, cfg.buttonStyle); }
-    if (cfg.tooltips) { localCfg.tooltips = Object.assign(defaultCfg.tooltips, cfg.tooltips); }
-    if (cfg.nextPageButton) { localCfg.nextPageButton = Object.assign(defaultCfg.nextPageButton, cfg.nextPageButton); }
-    if (cfg.beforePageButton) { localCfg.beforePageButton = Object.assign(defaultCfg.beforePageButton, cfg.beforePageButton); }
-    if (cfg.zoomOutButton) { localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton); }
-    if (cfg.zoomOutButton) { localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton); }
-    if (cfg.zoomInButton) { localCfg.zoomInButton = Object.assign(defaultCfg.zoomInButton, cfg.zoomInButton); }
-    if (cfg.rotateLeftButton) { localCfg.rotateLeftButton = Object.assign(defaultCfg.rotateLeftButton, cfg.rotateLeftButton); }
-    if (cfg.rotateRightButton) { localCfg.rotateRightButton = Object.assign(defaultCfg.rotateRightButton, cfg.rotateRightButton); }
-    if (cfg.resetButton) { localCfg.resetButton = Object.assign(defaultCfg.resetButton, cfg.resetButton); }
+    if (cfg.buttonStyle) {
+      localCfg.buttonStyle = Object.assign(defaultCfg.buttonStyle, cfg.buttonStyle);
+    }
+    if (cfg.tooltips) {
+      localCfg.tooltips = Object.assign(defaultCfg.tooltips, cfg.tooltips);
+    }
+    if (cfg.nextPageButton) {
+      localCfg.nextPageButton = Object.assign(defaultCfg.nextPageButton, cfg.nextPageButton);
+    }
+    if (cfg.beforePageButton) {
+      localCfg.beforePageButton = Object.assign(defaultCfg.beforePageButton, cfg.beforePageButton);
+    }
+    if (cfg.zoomOutButton) {
+      localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton);
+    }
+    if (cfg.zoomOutButton) {
+      localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton);
+    }
+    if (cfg.zoomInButton) {
+      localCfg.zoomInButton = Object.assign(defaultCfg.zoomInButton, cfg.zoomInButton);
+    }
+    if (cfg.rotateLeftButton) {
+      localCfg.rotateLeftButton = Object.assign(defaultCfg.rotateLeftButton, cfg.rotateLeftButton);
+    }
+    if (cfg.rotateRightButton) {
+      localCfg.rotateRightButton = Object.assign(defaultCfg.rotateRightButton, cfg.rotateRightButton);
+    }
+    if (cfg.resetButton) {
+      localCfg.resetButton = Object.assign(defaultCfg.resetButton, cfg.resetButton);
+    }
     return localCfg;
   }
 
   private screenToCanvasCentre(pos: { x: number, y: number }) {
     const rect = this._canvas.getBoundingClientRect();
-    return { x: pos.x - rect.left, y: pos.y - rect.top };
+    return {x: pos.x - rect.left, y: pos.y - rect.top};
   }
 
   private getUIElements(): Button[] {
@@ -486,19 +600,26 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private isImage(file: string | File) {
-    if (this._filetype && this._filetype.toLowerCase() === 'image') { return true; }
+    if (this._filetype && this._filetype.toLowerCase() === 'image') {
+      return true;
+    }
     return testFile(file, '\\.(png|jpg|jpeg|gif)|image/png');
   }
 
   private isPdf(file: string | File) {
-    if (this._filetype && this._filetype.toLowerCase() === 'pdf') { return true; }
+    if (this._filetype && this._filetype.toLowerCase() === 'pdf') {
+      return true;
+    }
     return testFile(file, '\\.(pdf)|application/pdf');
   }
+
   //#endregion
 }
 
 function testFile(file: string | File, regexTest: string) {
-  if (!file) { return false; }
+  if (!file) {
+    return false;
+  }
   const name = file instanceof File ? file.name : file;
   return name.toLowerCase().match(regexTest) !== null;
 }

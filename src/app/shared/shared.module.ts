@@ -1,16 +1,23 @@
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { LayoutModule } from '@angular/cdk/layout';
+import {NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {LayoutModule} from '@angular/cdk/layout';
 import {
-  MatToolbarModule, MatButtonModule, MatSidenavModule,
-  MatIconModule, MatListModule, MatFormFieldModule,
-  MatInputModule, MatButtonToggleModule, MatSlideToggleModule, MatProgressSpinnerModule
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatProgressSpinnerModule,
+  MatSidenavModule,
+  MatSlideToggleModule,
+  MatToolbarModule
 } from '@angular/material';
 
-import { ImageViewerModule } from '@hallysonh/ngx-imageviewer';
+import {ImageViewerModule} from '@hallysonh/ngx-imageviewer';
 
 @NgModule({
   imports: [
@@ -36,4 +43,5 @@ import { ImageViewerModule } from '@hallysonh/ngx-imageviewer';
     ImageViewerModule
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

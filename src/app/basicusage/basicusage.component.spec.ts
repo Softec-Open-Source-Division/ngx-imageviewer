@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../shared/shared.module';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SharedModule} from '../shared/shared.module';
 
-import { BasicUsageComponent } from './basicusage.component';
+import {BasicUsageComponent} from './basicusage.component';
 
 describe('BasicUsageComponent', () => {
   let component: BasicUsageComponent;
@@ -10,10 +10,10 @@ describe('BasicUsageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ BrowserAnimationsModule, SharedModule ],
-      declarations: [ BasicUsageComponent ]
+      imports: [BrowserAnimationsModule, SharedModule],
+      declarations: [BasicUsageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

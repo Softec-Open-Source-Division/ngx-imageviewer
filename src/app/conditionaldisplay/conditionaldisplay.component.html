@@ -1,16 +1,17 @@
 <h2 class="mat-title">Test conditional display</h2>
 
-<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="20px" fxFlex="100" fxLayoutAlign="start " class="mb">
+<div class="mb" fxFlex="100" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="start " fxLayoutGap="20px">
   <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-    <button mat-raised-button (click)="condition = !condition" color="accent">Toggle Visibility</button>
+    <button (click)="condition = !condition" color="accent" mat-raised-button>Toggle Visibility</button>
     <mat-slide-toggle [(ngModel)]="condition">{{ condition ? 'Visible' : 'Hidden'}}</mat-slide-toggle>
   </div>
-  <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px" fxFlex>
-    <mat-form-field fxFlex><input name="url" matInput placeholder="Resource URL" [(ngModel)]="url" disabled></mat-form-field>
-    <button mat-raised-button (click)="toggleUrl()" color="accent">Toggle URL</button>
+  <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+    <mat-form-field fxFlex><input [(ngModel)]="url" disabled matInput name="url" placeholder="Resource URL">
+    </mat-form-field>
+    <button (click)="toggleUrl()" color="accent" mat-raised-button>Toggle URL</button>
   </div>
 </div>
 
 <ngx-imageviewer *ngIf="condition" [src]="url"></ngx-imageviewer>
 
-<div *ngIf="!condition" fxLayoutAlign="center center" class="mat-headline">Nothing here</div>
+<div *ngIf="!condition" class="mat-headline" fxLayoutAlign="center center">Nothing here</div>

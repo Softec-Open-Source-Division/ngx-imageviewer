@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 export interface CacheDef {
   url: string;
@@ -6,12 +6,13 @@ export interface CacheDef {
   image: any;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class ImageCacheService {
 
-  private _cache: CacheDef[] = [];
+  constructor() {
+  }
 
-  constructor() {}
+  private _cache: CacheDef[] = [];
 
   get cache(): CacheDef[] {
     return this._cache;
@@ -31,7 +32,7 @@ export class ImageCacheService {
     if (cache) {
       cache.image = image;
     } else {
-      this.cache.push({ url, page, image });
+      this.cache.push({url, page, image});
     }
   }
 

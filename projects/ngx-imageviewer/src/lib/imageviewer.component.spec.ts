@@ -1,9 +1,9 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IMAGEVIEWER_CONFIG, IMAGEVIEWER_CONFIG_DEFAULT } from './imageviewer.config';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {IMAGEVIEWER_CONFIG, IMAGEVIEWER_CONFIG_DEFAULT} from './imageviewer.config';
 
 import 'hammerjs';
 
-import { ImageViewerComponent } from './imageviewer.component';
+import {ImageViewerComponent} from './imageviewer.component';
 
 describe('ImageViewerComponent', () => {
   let component: ImageViewerComponent;
@@ -11,10 +11,10 @@ describe('ImageViewerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImageViewerComponent ],
-      providers: [{ provide: IMAGEVIEWER_CONFIG, useValue: IMAGEVIEWER_CONFIG_DEFAULT }],
+      declarations: [ImageViewerComponent],
+      providers: [{provide: IMAGEVIEWER_CONFIG, useValue: IMAGEVIEWER_CONFIG_DEFAULT}],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

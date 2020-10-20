@@ -1,7 +1,6 @@
-import { ResourceLoader, Dimension, toSquareAngle } from './imageviewer.model';
-import { ImageCacheService } from './imagecache.service';
-import { ImageViewerConfig } from './imageviewer.config';
-import { PDFJSStatic, PDFDocumentProxy, PDFPageProxy } from 'pdfjs-dist';
+import {ResourceLoader} from './imageviewer.model';
+import {ImageCacheService} from './imagecache.service';
+import {PDFDocumentProxy, PDFPageProxy} from 'pdfjs-dist';
 
 declare var pdfjsLib: any;
 declare var pdfjsWorker: any;
@@ -23,7 +22,9 @@ export class PdfResourceLoader extends ResourceLoader {
 
   setUp() {
     const vm = this;
-    if (vm.loading || !vm.src) { return; }
+    if (vm.loading || !vm.src) {
+      return;
+    }
     const loadingTask = pdfjsLib.getDocument(vm.src);
     vm.loading = true;
     vm.currentItem = 1;

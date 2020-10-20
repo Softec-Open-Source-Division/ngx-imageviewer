@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 const URLS = [
   'https://hallysonh.github.io/ngx-imageviewer/pdf-test.pdf',
@@ -15,7 +15,8 @@ export class ConditionalDisplayComponent {
 
   private _currentIndex = 0;
 
-  constructor() { }
+  constructor() {
+  }
 
   toggleUrl() {
     this._currentIndex = this._currentIndex ? 0 : 1;

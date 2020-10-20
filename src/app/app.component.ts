@@ -1,9 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
-import { Observable, Subscription } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
+import {Component, OnDestroy} from '@angular/core';
+import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
+import {Observable, Subscription} from 'rxjs';
+import {NavigationEnd, Router} from '@angular/router';
 
-import { MAIN_ROUTES, EXAMPLES_ROUTES } from './app-routing.module';
+import {EXAMPLES_ROUTES, MAIN_ROUTES} from './app-routing.module';
 
 const APP_MENU = 'NgxImageViewer';
 const DEFAULT_TITLE = 'Not found';
@@ -18,10 +18,9 @@ export class AppComponent implements OnDestroy {
   mainlinks = MAIN_ROUTES;
   exampleLinks = EXAMPLES_ROUTES;
   currentTitle = DEFAULT_TITLE;
-
+  isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
   private eventSub: Subscription;
 
-  isHandset: Observable<BreakpointState> = this.breakpointObserver.observe(Breakpoints.Handset);
   constructor(
     private breakpointObserver: BreakpointObserver,
     private router: Router
@@ -29,7 +28,7 @@ export class AppComponent implements OnDestroy {
     this.eventSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         const newRoute = event.urlAfterRedirects;
-        const mapping = [ ... MAIN_ROUTES, ... EXAMPLES_ROUTES].filter( x => x.path === newRoute.substr(1));
+        const mapping = [...MAIN_ROUTES, ...EXAMPLES_ROUTES].filter(x => x.path === newRoute.substr(1));
         this.currentTitle = mapping.length ? mapping[0].title : DEFAULT_TITLE;
       }
     });

@@ -10,13 +10,14 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "styleext": "scss"
+          "style": "scss"
         }
       },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/ngx-imageviewer-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -36,7 +37,8 @@
             "scripts": [
               {
                 "input": "node_modules/pdfjs-dist/build/pdf.min.js"
-              }, {
+              },
+              {
                 "input": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
               }
             ],
@@ -49,6 +51,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -100,7 +108,8 @@
             "scripts": [
               {
                 "input": "node_modules/pdfjs-dist/build/pdf.min.js"
-              }, {
+              },
+              {
                 "input": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
               }
             ],
@@ -169,7 +178,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-imageviewer/ng-package.prod.json"
+              "project": "projects/ngx-imageviewer/ng-package.prod.json",
+              "tsConfig": "projects/ngx-imageviewer/tsconfig.lib.prod.json"
             }
           }
         },

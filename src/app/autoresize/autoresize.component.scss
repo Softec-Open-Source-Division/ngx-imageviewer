@@ -21,7 +21,7 @@ $hDiff: $headerHeight + $subHeaderHeight + $contentPadding * 2;
   flex: 1;
   box-sizing: border-box;
   overflow: hidden;
-  max-width: calc(100vw -  #{$wDiff});
+  max-width: calc(100vw - #{$wDiff});
   min-width: calc(100vw - #{$wDiff});
   width: calc(100vw - #{$wDiff});
   max-height: calc(100vh - #{$hDiff});

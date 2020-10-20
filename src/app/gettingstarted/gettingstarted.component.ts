@@ -1,8 +1,8 @@
-import { Component, OnDestroy, AfterContentInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
-import { Subscription } from 'rxjs';
-import { Converter } from 'showdown';
+import {AfterContentInit, Component, OnDestroy} from '@angular/core';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {HttpClient} from '@angular/common/http';
+import {Subscription} from 'rxjs';
+import {Converter} from 'showdown';
 
 declare const hljs: any;
 
@@ -27,7 +27,7 @@ export class GettingStartedComponent implements OnDestroy, AfterContentInit {
   ) {
     this.isLoading = true;
     this.converter = new Converter();
-    this.subscrition = this.http.get(README_URL, { responseType: 'text' }).subscribe(markdown => {
+    this.subscrition = this.http.get(README_URL, {responseType: 'text'}).subscribe(markdown => {
       this.html = this.sanitizer.bypassSecurityTrustHtml(this.converter.makeHtml(markdown));
       this.initHightlight();
       this.isLoading = false;
@@ -44,7 +44,9 @@ export class GettingStartedComponent implements OnDestroy, AfterContentInit {
   }
 
   private initHightlight() {
-    if (!this.html || !this.contentInited) { return; }
+    if (!this.html || !this.contentInited) {
+      return;
+    }
     setTimeout(() => hljs.initHighlighting(), 1200);
   }
 }

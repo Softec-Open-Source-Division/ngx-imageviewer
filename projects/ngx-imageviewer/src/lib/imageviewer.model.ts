@@ -1,5 +1,5 @@
-import { ButtonConfig, ButtonStyle, ImageViewerConfig } from './imageviewer.config';
-import { Observable, Subject } from 'rxjs';
+import {ButtonConfig, ButtonStyle, ImageViewerConfig} from './imageviewer.config';
+import {Subject} from 'rxjs';
 
 export class Button {
   //#region Properties
@@ -29,19 +29,26 @@ export class Button {
     this.icon = config.icon;
     this.tooltip = config.tooltip;
   }
+
   //#endregion
 
   //#region Events
   // click action
-  onClick(evt) { alert('no click action set!'); return true; }
+  onClick(evt) {
+    alert('no click action set!');
+    return true;
+  }
 
   // mouse down action
-  onMouseDown(evt) { return false; }
+  onMouseDown(evt) {
+    return false;
+  }
+
   //#endregion
 
   //#region Draw Button
   draw(ctx, x, y, radius) {
-    this.drawPosition = { x: x, y: y };
+    this.drawPosition = {x: x, y: y};
     this.drawRadius = radius;
 
     // preserve context
@@ -76,6 +83,17 @@ export class Button {
     ctx.restore();
   }
 
+  //#region Utils
+  isWithinBounds(x, y) {
+    if (this.drawPosition === null) {
+      return false;
+    }
+    const dx = Math.abs(this.drawPosition.x - x), dy = Math.abs(this.drawPosition.y - y);
+    return dx * dx + dy * dy <= this.drawRadius * this.drawRadius;
+  }
+
+  //#endregion
+
   private drawIconFont(ctx, centreX, centreY, size) {
     // font settings
     ctx.font = size + 'px ' + this.style.iconFontFamily;
@@ -89,14 +107,7 @@ export class Button {
     // draw it
     ctx.fillText(this.icon, x, y);
   }
-  //#endregion
 
-  //#region Utils
-  isWithinBounds(x, y) {
-    if (this.drawPosition === null) { return false; }
-    const dx = Math.abs(this.drawPosition.x - x), dy = Math.abs(this.drawPosition.y - y);
-    return dx * dx + dy * dy <= this.drawRadius * this.drawRadius;
-  }
   //#endregion
 }
 
@@ -108,15 +119,19 @@ export class Viewport {
     public rotation: number,
     public x: number,
     public y: number
-  ) {}
+  ) {
+  }
 }
 
-export interface Dimension { width: number; height: number; }
+export interface Dimension {
+  width: number;
+  height: number;
+}
 
 export abstract class ResourceLoader {
   public src: string;
   public sourceDim: { width: number, height: number };
-  public viewport: Viewport = { width: 0, height: 0, scale: 1, rotation: 0, x: 0, y: 0 };
+  public viewport: Viewport = {width: 0, height: 0, scale: 1, rotation: 0, x: 0, y: 0};
   public minScale = 0;
   public maxScale = 4;
   public currentItem = 1;
@@ -130,10 +145,13 @@ export abstract class ResourceLoader {
   protected resourceChange = new Subject<string>();
 
   abstract setUp();
+
   abstract loadResource();
 
   public resetViewport(canvasDim: Dimension): boolean {
-    if (!this.loaded || !canvasDim) { return; }
+    if (!this.loaded || !canvasDim) {
+      return;
+    }
 
     const rotation = this.viewport ? this.viewport.rotation : 0;
     const inverted = toSquareAngle(rotation) / 90 % 2 !== 0;
@@ -181,7 +199,9 @@ export abstract class ResourceLoader {
     onFinish(ctx, config, canvasDim);
   }
 
-  public onResourceChange() { return this.resourceChange.asObservable(); }
+  public onResourceChange() {
+    return this.resourceChange.asObservable();
+  }
 }
 
 export function toSquareAngle(angle: number) {

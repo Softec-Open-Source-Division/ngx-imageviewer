@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../shared/shared.module';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SharedModule} from '../shared/shared.module';
 
-import { ConditionalDisplayComponent } from './conditionaldisplay.component';
+import {ConditionalDisplayComponent} from './conditionaldisplay.component';
 
 describe('ConditionalDisplayComponent', () => {
   let component: ConditionalDisplayComponent;
@@ -10,10 +10,10 @@ describe('ConditionalDisplayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ BrowserAnimationsModule, SharedModule ],
-      declarations: [ ConditionalDisplayComponent ]
+      imports: [BrowserAnimationsModule, SharedModule],
+      declarations: [ConditionalDisplayComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
