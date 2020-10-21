@@ -21,60 +21,57 @@ export class PdfResourceLoader extends ResourceLoader {
   }
 
   setUp() {
-    const vm = this;
-    if (vm.loading || !vm.src) {
+    if (this.loading || !this.src) {
       return;
     }
-    const loadingTask = pdfjsLib.getDocument(vm.src);
-    vm.loading = true;
-    vm.currentItem = 1;
-    loadingTask.then((pdf: PDFDocumentProxy) => {
-      vm._pdf = pdf;
-      vm.totalItem = pdf.numPages;
-      vm.loaded = true;
-      vm.loadResource();
+    const loadingTask = pdfjsLib.getDocument(this.src);
+    this.loading = true;
+    this.currentItem = 1;
+    loadingTask.promise.then((pdf: PDFDocumentProxy) => {
+      this._pdf = pdf;
+      this.totalItem = pdf.numPages;
+      this.loaded = true;
+      this.loadResource();
     }, (reason: string) => {
       console.error(reason);
     });
   }
 
   loadResource() {
-    const vm = this;
-    if (!vm.loaded) {
-      vm._pendingReload = true;
+    if (!this.loaded) {
+      this._pendingReload = true;
       return;
     }
-    vm.loaded = false;
-    const url = vm.src;
-    const page = vm.currentItem;
+    this.loaded = false;
+    const url = this.src;
+    const page = this.currentItem;
 
-    vm._pdf.getPage(page).then((pdfPage) => {
-      vm._page = pdfPage;
-      vm.loadImage(url, page, () => {
-        vm.loaded = true;
-        vm.loading = false;
-        if (vm._pendingReload) {
-          vm._pendingReload = false;
-          vm.loadResource();
+    this._pdf.getPage(page).then((pdfPage) => {
+      this._page = pdfPage;
+      this.loadImage(url, page, () => {
+        this.loaded = true;
+        this.loading = false;
+        if (this._pendingReload) {
+          this._pendingReload = false;
+          this.loadResource();
         } else {
-          vm.resourceChange.next();
+          this.resourceChange.next();
         }
       });
     });
   }
 
   private loadImage(src: string, page: number, onFinish: () => void) {
-    const vm = this;
-    const cacheimg = vm._imageCache.getImage(src, page);
+    const cacheimg = this._imageCache.getImage(src, page);
     if (cacheimg) {
-      vm._image = cacheimg;
+      this._image = cacheimg;
       onFinish();
       return;
     }
 
     const canvas: HTMLCanvasElement = document.createElement('canvas');
     const context = canvas.getContext('2d');
-    const pageVp = vm._page.getViewport(2);
+    const pageVp = this._page.getViewport({scale: 1});
 
     canvas.width = pageVp.width;
     canvas.height = pageVp.height;
@@ -83,14 +80,15 @@ export class PdfResourceLoader extends ResourceLoader {
       canvasContext: context,
       viewport: pageVp
     };
-    const renderTask = vm._page.render(renderContext);
-    renderTask.then(function () {
+
+
+    this._page.render(renderContext).promise.then(() => {
       canvas.toBlob(blob => {
         const img = new Image();
         img.onload = onFinish;
         img.src = URL.createObjectURL(blob);
-        vm._imageCache.saveImage(src, page, img);
-        vm._image = img;
+        this._imageCache.saveImage(src, page, img);
+        this._image = img;
       });
     });
   }
