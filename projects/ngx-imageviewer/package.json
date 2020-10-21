@@ -1,11 +1,11 @@
 {
-  "name": "@hallysonh/ngx-imageviewer",
+  "name": "@softec/ngx-imageviewer",
   "version": "0.0.0-development",
-  "author": "Hallyson Almeida <hallysonh@gmail.com>",
+  "author": "Softec AG Open Source Division",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hallysonh/ngx-imageviewer"
+    "url": "https://github.com/Softec-Open-Source-Division/ngx-imageviewer"
   },
   "keywords": [
     "image",
@@ -15,7 +15,7 @@
     "canvas",
     "component"
   ],
-  "homepage": "https://github.com/hallysonh/ngx-imageviewer#readme",
+  "homepage": "https://github.com/Softec-Open-Source-Division/ngx-imageviewer#readme",
   "peerDependencies": {
     "@angular/common": "^8.2.10",
     "@angular/core": "^8.2.10",

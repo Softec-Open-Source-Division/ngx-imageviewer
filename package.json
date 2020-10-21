@@ -1,13 +1,13 @@
 {
   "name": "ngx-imageviewer-app",
   "version": "0.0.0-development",
-  "author": "Hallyson Almeida <hallysonh@gmail.com>",
+  "author": "Softec Open Source Division",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hallysonh/ngx-imageviewer"
+    "url": "https://github.com/Softec-Open-Source-Division/ngx-imageviewer"
   },
-  "homepage": "https://github.com/hallysonh/ngx-imageviewer#readme",
+  "homepage": "https://github.com/Softec-Open-Source-Division/ngx-imageviewer#readme",
   "scripts": {
     "ng": "ng",
     "start": "yarn build:lib && ng serve",

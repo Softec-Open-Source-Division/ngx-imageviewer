@@ -69,12 +69,14 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private _pdfResource: PdfResourceLoader;
 
   //#region Lifecycle events
+  private stopRendering: Boolean;
   constructor(
     private _sanitizer: DomSanitizer,
     private _renderer: Renderer2,
     private _imageCache: ImageCacheService,
     @Inject(IMAGEVIEWER_CONFIG) private config: ImageViewerConfig
   ) {
+    this.stopRendering = false;
     this.config = this.extendsDefaultConfig(config);
     this._nextPageButton = new Button(this.config.nextPageButton, this.config.buttonStyle);
     this._beforePageButton = new Button(this.config.beforePageButton, this.config.buttonStyle);
@@ -204,6 +206,7 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.stopRendering = true;
     // unregiste event listeners
     this._listenDestroyList.forEach(listenDestroy => {
       if (typeof listenDestroy === 'function') {
@@ -425,29 +428,30 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private render() {
-    const vm = this;
-    // only re-render if dirty
-    if (this._dirty && this._resource) {
-      this._dirty = false;
+    if (!this.stopRendering) {
+      // only re-render if dirty
+      if (this._dirty && this._resource) {
+        this._dirty = false;
 
-      const ctx = this._context;
-      ctx.save();
+        const ctx = this._context;
+        ctx.save();
 
-      this._resource.draw(ctx, this.config, this._canvas, () => {
-        ctx.restore();
+        this._resource.draw(ctx, this.config, this._canvas, () => {
+          ctx.restore();
 
-        if (vm._resource.loaded) {
-          // draw buttons
-          this.drawButtons(ctx);
+          if (this._resource.loaded) {
+            // draw buttons
+            this.drawButtons(ctx);
 
-          // draw paginator
-          if (this._resource.showItemsQuantity) {
-            this.drawPaginator(ctx);
+            // draw paginator
+            if (this._resource.showItemsQuantity) {
+              this.drawPaginator(ctx);
+            }
           }
-        }
-      });
+        });
+      }
+      requestAnimationFrame(() => this.render());
     }
-    requestAnimationFrame(() => this.render());
   }
 
   private drawButtons(ctx) {

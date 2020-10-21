@@ -1,7 +1,5 @@
 # Angular 10 - Canvas Image/PDF Viewer
 
-[![MIT License](https://img.shields.io/github/license/hallysonh/ngx-imageviewer.svg)](https://opensource.org/licenses/MIT)
-
 This project generate a image/pdf viewer using canvas.
 
 ## Features
@@ -36,7 +34,7 @@ Optionaly, you can also install the font library via npm or yarn.
 After import the module `ImageViewerModule`:
 
 ```typescript
-import { ImageViewerModule } from '@hallysonh/ngx-imageviewer';
+import { ImageViewerModule } from '@softec/ngx-imageviewer';
 
 @NgModule({
   imports: [ImageViewerModule],
@@ -75,7 +73,7 @@ To add PDF rendering support, you must first include `pdfjs` by running `npm ins
 Optionaly, you can provide a custom configuration like below:
 
 ```typescript
-import { IMAGEVIEWER_CONFIG, ImageViewerConfig } from '@hallysonh/ngx-imageviewer';
+import { IMAGEVIEWER_CONFIG, ImageViewerConfig } from '@softec/ngx-imageviewer';
 ...
 const MY_IMAGEVIEWER_CONFIG: ImageViewerConfig = {
   buttonStyle: {
