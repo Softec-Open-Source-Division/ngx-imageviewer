@@ -1,6 +1,3 @@
-sudo: required
-dist: trusty
-
 language: node_js
 
 branches.only:
@@ -11,12 +8,10 @@ cache:
   directories:
     - node_modules
 
-notifications.email: false
-
 node_js: '13'
 
 before_deploy:
-  - cd dist
+  - cd "dist/lib"
 
 jobs:
   include:
@@ -33,6 +28,7 @@ jobs:
         email: marajulind@outlook.com
         skip_cleanup: true
         api_key: $API_TOKEN
+        on: deploy-npm-release
 
 stages:
   - prepare
