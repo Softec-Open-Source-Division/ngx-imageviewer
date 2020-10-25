@@ -1,7 +1,7 @@
 {
   "name": "@softec/ngx-imageviewer",
-  "version": "0.0.0-development",
-  "author": "Softec AG Open Source Division",
+  "version": "2.1.5",
+  "author": "Softec AG Open Source Division & @hallysonh",
   "license": "MIT",
   "repository": {
     "type": "git",

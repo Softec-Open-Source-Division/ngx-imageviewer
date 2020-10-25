@@ -1,0 +1,40 @@
+sudo: required
+dist: trusty
+
+language: node_js
+
+branches.only:
+  - master
+
+cache:
+  npm: true
+  directories:
+    - node_modules
+
+notifications.email: false
+
+node_js: '13'
+
+before_deploy:
+  - cd dist
+
+jobs:
+  include:
+    - stage: prepare
+      name: "Install dependencies"
+      script: npm install
+    - stage: build
+      name: build
+      script: npm run build:lib
+    - stage: deploy
+      name: "Run deployment"
+      deploy:
+        provider: npm
+        email: marajulind@outlook.com
+        skip_cleanup: true
+        api_key: $API_TOKEN
+
+stages:
+  - prepare
+  - build
+  - deploy
