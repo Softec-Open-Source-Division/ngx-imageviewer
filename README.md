@@ -1,6 +1,7 @@
 # Angular 10 - Canvas Image/PDF Viewer
 
-This project generate a image/pdf viewer using canvas.
+This is a continuation of the work of @hallysonh's ngx-imageviewer.
+**Fully compatible with the latest pdfjs, angular and hammerjs libraries!**
 
 ## Features
 
@@ -18,7 +19,6 @@ This project generate a image/pdf viewer using canvas.
 > hammerjs is currently mandatory, but it will be optional in a future release.
 
 ## Icon Font
-
 You can use any icon font to render the button's icons. However, the default icon font is the Google's Material Icons. To use them you can just add the follow line to your index.html:
 
 ```html
@@ -30,7 +30,6 @@ Optionaly, you can also install the font library via npm or yarn.
 > when using another icon font, you should provide a config object with the button icon mapping
 
 ## Basic Usage
-
 After import the module `ImageViewerModule`:
 
 ```typescript
@@ -50,9 +49,17 @@ Use the follow code on your html:
 
 Optionaly, you can provide the fields `width` and `height`. If you omit those values, the width and height in the config object will be used.
 
-## Add PDF Support
 
-To add PDF rendering support, you must first include `pdfjs` by running `npm install pdfjs-dist@2.0.489` and add its reference in your `angular.json` file, like below:
+## Add Content Moveability and Finger gestures
+To add add Content Moveability and Finger Gestures support enable HammerJS by adding this to your polyfill.ts
+
+```
+import 'hammerjs/hammer'
+``` 
+*If for some reason you still can't move the content around then excplictly import ```HammerModule``` in your app module.*
+
+## Add PDF Support
+To add PDF rendering support, you must first include `pdfjs` by running `npm install pdfjs-dist@2.5.207` and add its reference in your `angular.json` file, like below:
 
 ```json
 {
@@ -69,7 +76,6 @@ To add PDF rendering support, you must first include `pdfjs` by running `npm ins
 ```
 
 ## Custom Configuration
-
 Optionaly, you can provide a custom configuration like below:
 
 ```typescript
@@ -95,7 +101,6 @@ const MY_IMAGEVIEWER_CONFIG: ImageViewerConfig = {
 ```
 
 The default configuration available is:
-
 ```typescript
 export const IMAGEVIEWER_CONFIG_DEFAULT: ImageViewerConfig = {
   width: 800, // component default width
