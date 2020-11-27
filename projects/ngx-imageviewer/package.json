@@ -17,8 +17,8 @@
   ],
   "homepage": "https://github.com/Softec-Open-Source-Division/ngx-imageviewer#readme",
   "peerDependencies": {
-    "@angular/common": "^8.2.10",
-    "@angular/core": "^8.2.10",
+    "@angular/common": "^10.2.3",
+    "@angular/core": "^10.2.3",
     "hammerjs": "^2.x"
   },
   "dependencies": {
