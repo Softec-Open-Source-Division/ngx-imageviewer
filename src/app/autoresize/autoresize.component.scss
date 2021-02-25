@@ -20,17 +20,16 @@ $hDiff: $headerHeight + $subHeaderHeight + $contentPadding * 2;
 .imagewrapper {
   flex: 1;
   box-sizing: border-box;
-  overflow: hidden;
-  max-width: calc(100vw - #{$wDiff});
-  min-width: calc(100vw - #{$wDiff});
-  width: calc(100vw - #{$wDiff});
-  max-height: calc(100vh - #{$hDiff});
-  min-height: calc(100vh - #{$hDiff});
-  height: calc(100vh - #{$hDiff});
+  max-width: calc(100% - #{$wDiff});
+  min-width: calc(100% - #{$wDiff});
+  width: calc(100% - #{$wDiff});
+  max-height: calc(100% - #{$hDiff});
+  min-height: calc(100% - #{$hDiff});
+  height: calc(100% - #{$hDiff});
 
   @media only screen and (max-width: 600px) {
-    max-width: calc(100vw - #{$contentPadding * 2});
-    min-width: calc(100vw - #{$contentPadding * 2});
-    width: calc(100vw - #{$contentPadding * 2});
+    max-width: calc(100% - #{$contentPadding * 2});
+    min-width: calc(100% - #{$contentPadding * 2});
+    width: calc(100% - #{$contentPadding * 2});
   }
 }
