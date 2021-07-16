@@ -40,6 +40,9 @@
               },
               {
                 "input": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
+              },
+              {
+                "input": "node_modules/print-js/dist/print.js"
               }
             ],
             "stylePreprocessorOptions": {
@@ -111,6 +114,9 @@
               },
               {
                 "input": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
+              },
+              {
+                "input": "node_modules/print-js/dist/print.js"
               }
             ],
             "assets": [

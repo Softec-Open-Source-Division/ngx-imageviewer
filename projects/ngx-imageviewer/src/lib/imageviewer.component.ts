@@ -10,6 +10,8 @@ import {PdfResourceLoader} from './pdf.loader';
 
 const MIN_TOOLTIP_WIDTH_SPACE = 500;
 
+declare var printJS: any;
+
 @Component({
   selector: 'ngx-imageviewer',
   template: `
@@ -35,7 +37,6 @@ const MIN_TOOLTIP_WIDTH_SPACE = 500;
   `]
 })
 export class ImageViewerComponent implements AfterViewInit, OnDestroy {
-
   @ViewChild('imageContainer') canvasRef: any;
   // Canvas 2D context
   private _canvas: HTMLCanvasElement;
@@ -50,12 +51,13 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private _rotateLeftButton: Button;
   private _rotateRightButton: Button;
   private _resetButton: Button;
+  private _printButton: Button;
   // contains all active buttons
   private _buttons = [];
   // current tool tip (used to track change of tool tip)
   private _currentTooltip = null;
-  //#endregion
 
+  //#endregion
   //#region Private properties
   // cached data when touch events started
   private _touchStartState: any = {};
@@ -66,8 +68,8 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private _resourceChangeSub: Subscription;
   // Caching resourceLoader instances to reuse
   private _imageResource: ImageResourceLoader;
-  private _pdfResource: PdfResourceLoader;
 
+  private _pdfResource: PdfResourceLoader;
   //#region Lifecycle events
   private stopRendering: Boolean;
   constructor(
@@ -85,12 +87,14 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this._rotateLeftButton = new Button(this.config.rotateLeftButton, this.config.buttonStyle);
     this._rotateRightButton = new Button(this.config.rotateRightButton, this.config.buttonStyle);
     this._resetButton = new Button(this.config.resetButton, this.config.buttonStyle);
+    this._printButton = new Button(this.config.printButton, this.config.buttonStyle);
     this._buttons = [
       this._zoomOutButton,
       this._zoomInButton,
       this._rotateLeftButton,
       this._rotateRightButton,
-      this._resetButton
+      this._resetButton,
+      this._printButton
     ].filter(item => item.display)
       .sort((a, b) => a.sortId - b.sortId);
   }
@@ -110,7 +114,7 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this.setUpResource();
   }
 
-  // FIX not workign properly
+  // FIX not working properly
   private _filetype: string;
 
   get filetype() {
@@ -165,7 +169,7 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this._canvas = this.canvasRef.nativeElement;
     this._context = this._canvas.getContext('2d');
 
-    // setting canvas dimention
+    // setting canvas dimension
     this._canvas.width = this.width || this.config.width;
     this._canvas.height = this.height || this.config.height;
 
@@ -196,6 +200,10 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     };
     this._resetButton.onClick = (evt) => {
       this.resetImage();
+      return false;
+    };
+    this._printButton.onClick = (evt) => {
+      this.startPrinting();
       return false;
     };
 
@@ -417,6 +425,14 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this._dirty = true;
   }
 
+  private startPrinting() {
+    const isDataURL = (s) => {
+      return !!s.match(/^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*)\s*$/i);
+    };
+
+    const handledSrc = this._resource.type === 'pdf' ? this._resource.src.split(',')[1] : this._resource.src;
+    printJS({printable: handledSrc, type: this._resource.type, base64: isDataURL(this._resource.src)});
+  }
   //#endregion
 
   //#region Draw Canvas
@@ -566,9 +582,6 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     if (cfg.zoomOutButton) {
       localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton);
     }
-    if (cfg.zoomOutButton) {
-      localCfg.zoomOutButton = Object.assign(defaultCfg.zoomOutButton, cfg.zoomOutButton);
-    }
     if (cfg.zoomInButton) {
       localCfg.zoomInButton = Object.assign(defaultCfg.zoomInButton, cfg.zoomInButton);
     }
@@ -580,6 +593,9 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     }
     if (cfg.resetButton) {
       localCfg.resetButton = Object.assign(defaultCfg.resetButton, cfg.resetButton);
+    }
+    if (cfg.printButton) {
+      localCfg.printButton = Object.assign(defaultCfg.printButton, cfg.printButton);
     }
     return localCfg;
   }
@@ -616,8 +632,6 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     }
     return testFile(file, '\\.(pdf)|application/pdf');
   }
-
-  //#endregion
 }
 
 function testFile(file: string | File, regexTest: string) {

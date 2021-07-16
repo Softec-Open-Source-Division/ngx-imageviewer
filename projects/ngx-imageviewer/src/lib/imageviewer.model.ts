@@ -140,6 +140,7 @@ export abstract class ResourceLoader {
   public loaded = false;
   public loading = false;
   public rendering = false;
+  public type: string;
 
   protected _image;
   protected resourceChange = new Subject<string>();

@@ -15,6 +15,7 @@ This is a continuation of the work of @hallysonh's ngx-imageviewer.
   - Reset to maximize size
   - Free movable
   - Change page (available just for PDF files)
+  - Printing availability
 
 > hammerjs is currently mandatory, but it will be optional in a future release.
 
@@ -65,11 +66,29 @@ To add PDF rendering support, you must first include `pdfjs` by running `npm ins
 {
   ...
   "scripts": [
+    ...,
     {
       "input": "node_modules/pdfjs-dist/build/pdf.min.js"
     }, {
       "input": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
-    }
+    },
+    ...
+  ],
+  ...
+}
+```
+## Add Printing Support
+To add Printing  support, you must first include `print-js` by running `npm install print-js@1.6.0` and add its reference in your `angular.json` file, like below:
+
+```json
+{
+  ...
+  "scripts": [
+    ...,
+    {
+      "input": "node_modules/print-js/dist/print.js"
+    },
+    ...
   ],
   ...
 }
@@ -142,5 +161,6 @@ export const IMAGEVIEWER_CONFIG_DEFAULT: ImageViewerConfig = {
   rotateLeftButton: createButtonConfig('rotate_left', 'Rotate left', 2),
   rotateRightButton: createButtonConfig('rotate_right', 'Rotate right', 3),
   resetButton: createButtonConfig('autorenew', 'Reset', 4),
+  printButton: createButtonConfig('print', 'Print', 5),
 };
 ```

@@ -13,6 +13,7 @@ export class ImageResourceLoader extends ResourceLoader {
       this.loaded = true;
       this.loading = false;
       this.resourceChange.next();
+      this.type = 'image';
     }, false);
     this._image.src = this.src;
   }

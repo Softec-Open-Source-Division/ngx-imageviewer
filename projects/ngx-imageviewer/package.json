@@ -1,6 +1,6 @@
 {
   "name": "@softec/ngx-imageviewer",
-  "version": "2.1.6",
+  "version": "3.0.0",
   "author": "Softec AG Open Source Division & @hallysonh",
   "license": "MIT",
   "repository": {
@@ -25,6 +25,7 @@
     "tslib": "^2.0.0"
   },
   "optionalDependencies": {
-    "pdfjs-dist": "^2.5.207"
+    "pdfjs-dist": "^2.5.207",
+    "print-js": "^1.6.0"
   }
 }

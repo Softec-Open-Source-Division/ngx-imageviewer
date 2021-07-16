@@ -50,6 +50,7 @@ export class PdfResourceLoader extends ResourceLoader {
       this._page = pdfPage;
       this.loadImage(url, page, () => {
         this.loaded = true;
+        this.type = 'pdf';
         this.loading = false;
         if (this._pendingReload) {
           this._pendingReload = false;
