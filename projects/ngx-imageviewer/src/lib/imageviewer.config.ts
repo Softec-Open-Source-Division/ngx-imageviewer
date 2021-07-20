@@ -8,6 +8,7 @@ export class ImageViewerConfig {
   rotateStepper?: boolean;
   buttonStyle?: ButtonStyle;
   loadingMessage?: string;
+  shareNotSupportedMessage: string;
   tooltips?: {
     enabled?: boolean,
     bgStyle?: string,
@@ -25,6 +26,7 @@ export class ImageViewerConfig {
   rotateRightButton?: ButtonConfig;
   resetButton?: ButtonConfig;
   printButton?: ButtonConfig;
+  shareButton?: ButtonConfig;
 }
 
 export interface ButtonStyle {
@@ -57,6 +59,7 @@ export let IMAGEVIEWER_CONFIG_DEFAULT: ImageViewerConfig = {
   scaleStep: 0.1, // zoom scale step (using the zoom in/out buttons)
   rotateStepper: false,
   loadingMessage: 'Loading...',
+  shareNotSupportedMessage: 'Sharing in this browser is not supported!',
   buttonStyle: {
     iconFontFamily: 'Material Icons', // font used to render the button icons
     alpha: 0.5, // buttons' transparence value
@@ -82,5 +85,6 @@ export let IMAGEVIEWER_CONFIG_DEFAULT: ImageViewerConfig = {
   rotateLeftButton: createButtonConfig(String.fromCharCode(0xE419), 'Rotate left', 2),
   rotateRightButton: createButtonConfig(String.fromCharCode(0xE41A), 'Rotate right', 3),
   resetButton: createButtonConfig(String.fromCharCode(0xE863), 'Reset', 4),
-  printButton: createButtonConfig(String.fromCharCode(0xE8AD), 'Print', 5)
+  printButton: createButtonConfig(String.fromCharCode(0xE8AD), 'Print', 5),
+  shareButton: createButtonConfig(String.fromCharCode(0xE80D), 'Share', 6)
 };

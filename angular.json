@@ -212,5 +212,8 @@
       }
     }
   },
-  "defaultProject": "ngx-imageviewer-app"
+  "defaultProject": "ngx-imageviewer-app",
+  "cli": {
+    "analytics": false
+  }
 }

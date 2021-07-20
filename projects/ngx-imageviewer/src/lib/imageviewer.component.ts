@@ -52,6 +52,7 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   private _rotateRightButton: Button;
   private _resetButton: Button;
   private _printButton: Button;
+  private _shareButton: Button;
   // contains all active buttons
   private _buttons = [];
   // current tool tip (used to track change of tool tip)
@@ -88,13 +89,15 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     this._rotateRightButton = new Button(this.config.rotateRightButton, this.config.buttonStyle);
     this._resetButton = new Button(this.config.resetButton, this.config.buttonStyle);
     this._printButton = new Button(this.config.printButton, this.config.buttonStyle);
+    this._shareButton = new Button(this.config.shareButton, this.config.buttonStyle);
     this._buttons = [
       this._zoomOutButton,
       this._zoomInButton,
       this._rotateLeftButton,
       this._rotateRightButton,
       this._resetButton,
-      this._printButton
+      this._printButton,
+      this._shareButton
     ].filter(item => item.display)
       .sort((a, b) => a.sortId - b.sortId);
   }
@@ -204,6 +207,10 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     };
     this._printButton.onClick = (evt) => {
       this.startPrinting();
+      return false;
+    };
+    this._shareButton.onClick = (evt) => {
+      this.startSharing();
       return false;
     };
 
@@ -347,6 +354,16 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  private isDataURL = (s) => {
+    return !!s.match(/^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*)\s*$/i);
+  }
+
+  private async generateFileFromDataUrl(dataUrl: string): Promise<File> {
+    const response = await fetch(dataUrl);
+    const blob = await response.blob();
+    return new File([blob], 'Attachment.' + blob.type.split('/')[1], {type: blob.type});
+  }
+
   //#endregion
 
   //#region Button Actions
@@ -426,12 +443,20 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   private startPrinting() {
-    const isDataURL = (s) => {
-      return !!s.match(/^\s*data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@\/?%\s]*)\s*$/i);
-    };
-
     const handledSrc = this._resource.type === 'pdf' ? this._resource.src.split(',')[1] : this._resource.src;
-    printJS({printable: handledSrc, type: this._resource.type, base64: isDataURL(this._resource.src)});
+    printJS({printable: handledSrc, type: this._resource.type, base64: this.isDataURL(this._resource.src)});
+  }
+  private startSharing() {
+    if ('canShare' in navigator) {
+      this.generateFileFromDataUrl(this._resource.src).then(
+        (file) => {
+          // @ts-ignore
+          navigator.share({title: file.name, files: [file], text: file.name});
+        }
+      );
+    } else {
+      alert(this.config.shareNotSupportedMessage);
+    }
   }
   //#endregion
 
@@ -596,6 +621,9 @@ export class ImageViewerComponent implements AfterViewInit, OnDestroy {
     }
     if (cfg.printButton) {
       localCfg.printButton = Object.assign(defaultCfg.printButton, cfg.printButton);
+    }
+    if (cfg.shareButton) {
+      localCfg.shareButton = Object.assign(defaultCfg.shareButton, cfg.shareButton);
     }
     return localCfg;
   }

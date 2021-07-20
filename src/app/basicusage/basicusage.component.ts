@@ -15,8 +15,8 @@ export class BasicUsageComponent {
     {label: 'Image 6', url: 'https://hallysonh.github.io/ngx-imageviewer/assets/imgs/sample-5.jpg'}
   ];
 
-  canvasWidth = 800;
-  canvasHeight = 600;
+  canvasWidth = 0.8 * window.innerWidth;
+  canvasHeight = 0.7 * window.innerHeight;
   imageSrc = this.samples[0].url;
 
   constructor() {

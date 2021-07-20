@@ -1,10 +1,10 @@
 # Angular 10 - Canvas Image/PDF Viewer
 
 This is a continuation of the work of @hallysonh's ngx-imageviewer.
+
 **Fully compatible with the latest pdfjs, angular and hammerjs libraries!**
 
 ## Features
-
 - Configurable
 - Resizeble component
 - Supports JPEG, PNG, GIF and **PDF**
@@ -16,6 +16,7 @@ This is a continuation of the work of @hallysonh's ngx-imageviewer.
   - Free movable
   - Change page (available just for PDF files)
   - Printing availability
+  - Sharing (Using Web Share API)
 
 > hammerjs is currently mandatory, but it will be optional in a future release.
 
@@ -162,5 +163,6 @@ export const IMAGEVIEWER_CONFIG_DEFAULT: ImageViewerConfig = {
   rotateRightButton: createButtonConfig('rotate_right', 'Rotate right', 3),
   resetButton: createButtonConfig('autorenew', 'Reset', 4),
   printButton: createButtonConfig('print', 'Print', 5),
+  shareButton: createButtonConfig('share', 'Share', 6)
 };
 ```
